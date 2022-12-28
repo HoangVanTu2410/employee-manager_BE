@@ -37,9 +37,10 @@ namespace MISA.AMIS.BL
         /// Sửa thông tin 1 đối tượng
         /// </summary>
         /// <param name="record">Đối tượng cần sửa</param>
+        /// <param name="recordID">ID của đối tượng cần sửa</param>
         /// <returns>Đối tượng trả về từ tầng BL</returns>
         /// Created by: HVTu (20/11/2022)
-        public ExecutionResult UpdateRecord(T record);
+        public ExecutionResult UpdateRecord(T record, Guid recordID);
 
         /// <summary>
         /// Xóa 1 đối tượng

@@ -35,9 +35,10 @@
         /// Sửa thông tin 1 đối tượng
         /// </summary>
         /// <param name="record">Đối tượng cần sửa</param>
+        /// <param name="recordID">ID của đối tượng cần sửa</param>
         /// <returns>Số bản ghi bị ảnh hưởng</returns>
         /// Created by: HVTu (20/11/2022)
-        public int UpdateRecord(T record);
+        public int UpdateRecord(T record, Guid recordID);
 
         /// <summary>
         /// Xóa 1 đối tượng

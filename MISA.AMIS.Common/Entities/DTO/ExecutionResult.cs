@@ -8,9 +8,14 @@ namespace MISA.AMIS.Common.Entities
     public class ExecutionResult
     {
         /// <summary>
-        /// Mã kết quả
+        /// Trạng thái thực thi
         /// </summary>
         public ActionStatus ActionStatus { get; set; }
+
+        /// <summary>
+        /// Mã lỗi khi thực thi thất bại
+        /// </summary>
+        public ErrorCode? ErrorCode { get; set; }
 
         /// <summary>
         /// Dữ liệu trả về

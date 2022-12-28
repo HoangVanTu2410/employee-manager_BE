@@ -19,14 +19,12 @@ namespace MISA.AMIS.Common.Entities
         /// <summary>
         /// Mã nhân viên
         /// </summary>
-        [Required(ErrorMessage = "EmptyEmployeeCode")]
         [JsonPropertyName("EmployeeCode")]
         public string EmployeeCode { get; set; }
 
         /// <summary>
         /// Tên nhân viên
         /// </summary>
-        [Required(ErrorMessage = "EmptyEmployeeName")]
         [JsonPropertyName("EmployeeName")]
         public string EmployeeName { get; set; }
 
@@ -45,7 +43,6 @@ namespace MISA.AMIS.Common.Entities
         /// <summary>
         /// ID của phòng ban
         /// </summary>
-        [Required(ErrorMessage = "EmptyDepartmentId")]
         [JsonPropertyName("DepartmentID")]
         public Guid DepartmentID { get; set; }
 

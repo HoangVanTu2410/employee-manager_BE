@@ -126,6 +126,7 @@ namespace MISA.AMIS.BL
             if (errors.Count() > 0)
             {
                 result.ActionStatus = ActionStatus.Failure;
+                result.ErrorCode = ErrorCode.InvalidData;
                 result.ResultData = errors;
                 return result;
             }
@@ -144,6 +145,69 @@ namespace MISA.AMIS.BL
             {
                 // Nếu đã tồn tại nhân viên có mã này thì trả về client lỗi trùng mã
                 result.ActionStatus = ActionStatus.Failure;
+                result.ErrorCode = ErrorCode.DuplicateCode;
+            }
+            else
+            {
+                result.ActionStatus = ActionStatus.Success;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Thêm mới 1 nhân viên
+        /// </summary>
+        /// <param name="record">Nhân viên cần thêm mới</param>
+        /// <returns>Đối tượng trả về từ tầng BL</returns>
+        /// Created by: HVTu (20/11/2022)
+        public override ExecutionResult InsertRecord(Employee record)
+        {
+            ExecutionResult result = new ExecutionResult();
+            var resultValidate = ValidateRequestData(record);
+            if (resultValidate.ActionStatus == ActionStatus.Failure)
+            {
+                return resultValidate;
+            } 
+            var recordID = _employeeDL.InsertRecord(record);
+            if (recordID != Guid.Empty)
+            {
+                result.ActionStatus = ActionStatus.Success;
+                result.ResultData = recordID;
+            }
+            else
+            {
+                result.ActionStatus = ActionStatus.Failure;
+                result.ErrorCode = ErrorCode.Exception;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Sửa thông tin 1 nhân viên
+        /// </summary>
+        /// <param name="record">Nhân viên cần sửa</param>
+        /// <param name="recordID">ID của nhân viên cần sửa</param>
+        /// <returns>Đối tượng trả về từ tầng BL</returns>
+        /// Created by: HVTu (20/11/2022)
+        public override ExecutionResult UpdateRecord(Employee record, Guid recordID)
+        {
+            ExecutionResult result = new ExecutionResult();
+            record.EmployeeID = recordID;
+            var resultValidate = ValidateRequestData(record);
+            if (resultValidate.ActionStatus == ActionStatus.Failure)
+            {
+                return resultValidate;
+            }
+            var numberOfAffectedRows = _employeeDL.UpdateRecord(record, recordID);
+            if (numberOfAffectedRows > 0)
+            {
+                result.ActionStatus = ActionStatus.Success;
+                result.ResultData = numberOfAffectedRows;
+            }
+            else
+            {
+                result.ActionStatus = ActionStatus.Failure;
+                result.ErrorCode = ErrorCode.Exception;
             }
             return result;
         }

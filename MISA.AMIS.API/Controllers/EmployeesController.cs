@@ -38,7 +38,7 @@ namespace MISA.AMIS.API.Controllers
         /// </returns>
         /// Created by: HVTu (20/11/2022)
         [HttpGet]
-        [Route("filter")]
+        [Route("Filter")]
         public IActionResult GetEmployeeByFilterAndPaging(
             [FromQuery] string? keyword,
             [FromQuery] int offset,
@@ -53,14 +53,7 @@ namespace MISA.AMIS.API.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
-                {
-                    ErrorCode = ErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Exception,
-                    MoreInfo = Resources.MoreInfo_Exception,
-                    TraceId = HttpContext.TraceIdentifier
-                });
+                return NotFound();
             }
         }
 
@@ -80,14 +73,90 @@ namespace MISA.AMIS.API.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
+                return HandleException();
+            }
+        }
+
+        /// <summary>
+        /// API thêm mới 1 nhân viên
+        /// </summary>
+        /// <param name="record">Nhân viên</param>
+        /// <returns>ID của đối tượng mới thêm</returns>
+        /// Created by: HVTu (20/11/2022)
+        [HttpPost]
+        public override IActionResult InsertRecord([FromBody] Employee record)
+        {
+            var executionResult = _employeeBL.InsertRecord(record);
+            if (executionResult.ActionStatus == ActionStatus.Success)
+            {
+                return StatusCode(StatusCodes.Status201Created, executionResult.ResultData);
+            }
+            else
+            {
+                switch (executionResult.ErrorCode)
                 {
-                    ErrorCode = ErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Exception,
-                    MoreInfo = Resources.MoreInfo_Exception,
-                    TraceId = HttpContext.TraceIdentifier
-                });
+                    case ErrorCode.InvalidData:
+                        return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
+                        {
+                            ErrorCode = ErrorCode.InvalidData,
+                            DevMsg = Resources.DevMsg_Exception,
+                            UserMsg = Resources.UserMsg_InvalidData,
+                            MoreInfo = executionResult.ResultData,
+                            TraceId = HttpContext.TraceIdentifier
+                        });
+                    case ErrorCode.DuplicateCode:
+                        return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
+                        {
+                            ErrorCode = ErrorCode.DuplicateCode,
+                            DevMsg = Resources.DevMsg_Exception,
+                            UserMsg = Resources.UserMsg_DuplicateCode,
+                            MoreInfo = Resources.MoreInfo_Exception,
+                            TraceId = HttpContext.TraceIdentifier
+                        });
+                    default: return HandleException();
+                }
+            }
+        }
+
+        /// <summary>
+        /// API sửa thông tin 1 nhân viên
+        /// </summary>
+        /// <param name="record">Nhân viên</param>
+        /// <param name="id">ID của nhân viên</param>
+        /// <returns>Số bản ghi bị ảnh hưởng</returns>
+        [HttpPut]
+        [Route("{id}")]
+        public override IActionResult UpdateRecord([FromBody] Employee record, [FromRoute] Guid id)
+        {
+            var executionResult = _employeeBL.UpdateRecord(record, id);
+            if (executionResult.ActionStatus == ActionStatus.Success)
+            {
+                return Ok(executionResult.ResultData);
+            }
+            else
+            {
+                switch (executionResult.ErrorCode)
+                {
+                    case ErrorCode.InvalidData:
+                        return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
+                        {
+                            ErrorCode = ErrorCode.InvalidData,
+                            DevMsg = Resources.DevMsg_Exception,
+                            UserMsg = Resources.UserMsg_InvalidData,
+                            MoreInfo = executionResult.ResultData,
+                            TraceId = HttpContext.TraceIdentifier
+                        });
+                    case ErrorCode.DuplicateCode:
+                        return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
+                        {
+                            ErrorCode = ErrorCode.DuplicateCode,
+                            DevMsg = Resources.DevMsg_Exception,
+                            UserMsg = Resources.UserMsg_DuplicateCode,
+                            MoreInfo = Resources.MoreInfo_Exception,
+                            TraceId = HttpContext.TraceIdentifier
+                        });
+                    default: return HandleException();
+                }
             }
         }
 

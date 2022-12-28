@@ -18,14 +18,12 @@ namespace MISA.AMIS.Common.Entities
         /// <summary>
         /// Mã phòng ban
         /// </summary>
-        [Required(ErrorMessage = "EmptyDepartmentCode")]
         [JsonPropertyName("DepartmentCode")]
         public string DepartmentCode { get; set; }
 
         /// <summary>
         /// Tên phòng ban
         /// </summary>
-        [Required(ErrorMessage = "EmptyDepartmentName")]
         [JsonPropertyName("DepartmentName")]
         public string DepartmentName { get; set; }
     }

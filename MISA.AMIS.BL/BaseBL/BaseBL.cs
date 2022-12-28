@@ -76,7 +76,7 @@ namespace MISA.AMIS.BL
         /// <param name="record">Đối tương cần thêm mới</param>
         /// <returns>Đối tượng trả về từ tầng BL</returns>
         /// Created by: HVTu (20/11/2022)
-        public ExecutionResult InsertRecord(T record)
+        public virtual ExecutionResult InsertRecord(T record)
         {
             ExecutionResult result = new ExecutionResult();
             var recordID = _baseDL.InsertRecord(record);
@@ -96,13 +96,14 @@ namespace MISA.AMIS.BL
         /// Sửa thông tin 1 đối tượng
         /// </summary>
         /// <param name="record">Đối tượng cần sửa</param>
+        /// <param name="recordID">ID của đối tượng cần sửa</param>
         /// <returns>Đối tượng trả về từ tầng BL</returns>
         /// Created by: HVTu (20/11/2022)
-        public ExecutionResult UpdateRecord(T record)
+        public virtual ExecutionResult UpdateRecord(T record, Guid recordID)
         {
             ExecutionResult result = new ExecutionResult();
-            var numberOfAffectedRows = _baseDL.UpdateRecord(record);
-            if (numberOfAffectedRows != 0)
+            var numberOfAffectedRows = _baseDL.UpdateRecord(record, recordID);
+            if (numberOfAffectedRows > 0)
             {
                 result.ActionStatus = ActionStatus.Success;
                 result.ResultData = numberOfAffectedRows;
@@ -124,7 +125,7 @@ namespace MISA.AMIS.BL
         {
             ExecutionResult result = new ExecutionResult();
             var numberOfAffectedRows = _baseDL.DeleteRecord(recordID);
-            if (numberOfAffectedRows != 0)
+            if (numberOfAffectedRows > 0)
             {
                 result.ActionStatus = ActionStatus.Success;
                 result.ResultData = numberOfAffectedRows;
@@ -146,7 +147,7 @@ namespace MISA.AMIS.BL
         {
             ExecutionResult result = new ExecutionResult();
             var numberOfAffectedRows = _baseDL.DeleteMultipleRecord(recordIDs);
-            if (numberOfAffectedRows != 0)
+            if (numberOfAffectedRows > 0)
             {
                 result.ActionStatus = ActionStatus.Success;
                 result.ResultData = numberOfAffectedRows;
